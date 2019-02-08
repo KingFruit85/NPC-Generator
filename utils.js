@@ -13,15 +13,30 @@ var getRandomItem = (collection) => {index = getRandomNumber(0, collection.lengt
     return collection[index];
 };
 
-var getGender = (person) => {
-  x = getRandomNumber(1,2);
-  switch (true) {
-    case (x === 1):person.gender = "male";break;
-    case (x === 2):person.gender = "female";break;
-    default:person.gender = "fell though swith case"
+var getGender = (person, gender) => {
+
+  if (gender === undefined){
+
+    x = getRandomNumber(1,2);
+    switch (true) {
+      case (x === 1):person.gender = "male";break;
+      case (x === 2):person.gender = "female";break;
+      default:person.gender = "fell though swith case"
+
   }
-  return person;
 }
+  else if (gender === "male"){
+      person.gender = "male";
+  }
+  else if (gender === "female"){
+    person.gender = "female";
+  }
+  else{
+    person.gender = "invalid gender arguement";
+  }
+    return person;
+  }
+
 
 var createName = (person) => {
   if (person.gender === "male"){
@@ -130,30 +145,47 @@ var createSpouse = (person) => {
 
   if (person.ageCategory === "infant" || person.ageCategory === "child" || person.maritalStatus === "single"){
     person.spouse = "no spouse";
+
+    return person;
+
   }
-  else {
+  else if (person.gender === "male") {
 
     switch (true) {
-      case person.ageCategory === "youth" : person.spouse = createSpousePerson(person);break;
-      case person.ageCategory === "adult" : person.spouse = createSpousePerson(person);break;
-      case person.ageCategory === "senior": person.spouse = createSpousePerson(person);break;
+      case person.ageCategory === "youth" : person.spouse = createSpousePerson(person, "female");break;
+      case person.ageCategory === "adult" : person.spouse = createSpousePerson(person, "female");break;
+      case person.ageCategory === "senior": person.spouse = createSpousePerson(person, "female");break;
       default:person.spouse = "fell though switch statement"
+
+      return person;
+
+    }
+
+  }
+  else if (person.gender === "female"){
+
+    switch (true) {
+      case person.ageCategory === "youth" : person.spouse = createSpousePerson(person, "male");break;
+      case person.ageCategory === "adult" : person.spouse = createSpousePerson(person, "male");break;
+      case person.ageCategory === "senior": person.spouse = createSpousePerson(person, "male");break;
+      default:person.spouse = "fell though switch statement"
+
+      return person;
 
     }
 
   }
 
-  return person;
 
 }
 
-var createSpousePerson = (person) => {
+var createSpousePerson = (person, gender) => {
 
   spouse = {}
 
   if (person.maritalStatus === "widow" || person.maritalStatus === "widower"){
     spouse.status = "deceased"
-    getGender(spouse)
+    getGender(spouse, gender)
     createName(spouse);
     createAge(spouse, person.ageCategory);
 
@@ -161,6 +193,7 @@ var createSpousePerson = (person) => {
   else{
 
     spouse.status = "alive"
+
     getGender(spouse)
     createName(spouse);
     createAge(spouse, person.ageCategory);
@@ -176,6 +209,18 @@ var createSpousePerson = (person) => {
   }
 
   return spouse;
+
+}
+
+var createChildren = (person) => {
+
+    if (person.ageCategory === "infant" || person.ageCategory === "child" || person.maritalStatus === "single" || person.spouse === "no spouse"){
+      return;
+    }
+
+      children = {};
+
+
 
 }
 
@@ -264,7 +309,23 @@ var createPerson = (category) => {
 }
 
 
+var createMultiplePeople = (number) =>{
+  group = [];
+
+  for (number; number > 0; number --){
+    group.push(createPerson())
+  }
+  return group;
+}
+
+const fs =require('fs');
+
+fs.writeFile('export.txt', JSON.stringify(createMultiplePeople(10), undefined, 2), (err) => {
+  if (err) throw err;
+
+  console.log("saved")
+})
 
 
 // console.log(createPerson())
-console.log(JSON.stringify(createPerson(), undefined, 2))
+console.log(JSON.stringify(createMultiplePeople(100), undefined, 2))
