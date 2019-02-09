@@ -4,6 +4,7 @@ const descriptors =require('./descriptors.js');
 const names =require('./names.js');
 const occupation =require('./occupations.js');
 const traits =require('./traits.js');
+const death =require('./death.js');
 
 
 var getRandomNumber = (min, max) => {return Math.floor(Math.random() * (max - min + 1)) + min;};
@@ -188,6 +189,11 @@ var createSpousePerson = (person, gender) => {
     getGender(spouse, gender)
     createName(spouse);
     createAge(spouse, person.ageCategory);
+    relationshipLength = getRandomNumber(1 , (spouse.age - 16))
+    spouse.relationshipLength = relationshipLength - getRandomNumber(1 , relationshipLength)
+
+    spouse.causesOfDeath = getRandomItem(death.causesOfDeath);
+
 
   }
   else{
@@ -202,6 +208,8 @@ var createSpousePerson = (person, gender) => {
     getOccupation(spouse);
     createFeatures(spouse);
     getTraits(spouse);
+    relationshipLength = getRandomNumber(1 , (spouse.age - 16))
+    spouse.relationshipLength = relationshipLength - getRandomNumber(1 , relationshipLength)
 
     if (person.maritalStatus === "married" || person.maritalStatus === "widow" || person.maritalStatus == "widower"){
         spouse.lastName = person.lastName;
@@ -212,17 +220,40 @@ var createSpousePerson = (person, gender) => {
 
 }
 
-var createChildren = (person) => {
+//children cannot be older than the mother and the mother cannot have given birth
+var createChild = (person) => {
 
-    if (person.ageCategory === "infant" || person.ageCategory === "child" || person.maritalStatus === "single" || person.spouse === "no spouse"){
-      return;
+  if (person.spouse != "no spouse" && person.spouse.gender != person.gender){
+    person.children = [];
+    potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
+
+    for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
+      let child = {};
+      getGender(child);
+      createName(child)
+      child.lastName = getFamilySurname(person);
+      child.age = getRandomNumber(1 , (person.age - 16));
+      person.children.push(child)
     }
-
-      children = {};
-
-
-
+    return person;
+  }
+  else{
+    person.children = "no children"
+  }
+  return person
 }
+
+var getFamilySurname = (person) => {
+  let familySurname = undefined
+  if (person.gender === "male"){
+    return person.lastName
+  }
+  else if (person.gender === "female"){
+    return person.spouse.lastName
+  }
+  return familySurname
+}
+
 
 var createPerson = (category) => {
 
@@ -252,6 +283,7 @@ var createPerson = (category) => {
     getOccupation(person);
     createFeatures(person);
     getTraits(person);
+
 
   }
   else if (category === "youth"){
@@ -304,6 +336,7 @@ var createPerson = (category) => {
   }
 
   createSpouse(person)
+  createChild(person)
   return person;
 
 }
@@ -326,6 +359,7 @@ fs.writeFile('export.txt', JSON.stringify(createMultiplePeople(10), undefined, 2
   console.log("saved")
 })
 
+// xy = createPerson("adult")
+// console.log(xy)
 
-// console.log(createPerson())
-console.log(JSON.stringify(createMultiplePeople(100), undefined, 2))
+// console.log(JSON.stringify(createMultiplePeople(100), undefined, 2))
