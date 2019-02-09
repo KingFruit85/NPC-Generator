@@ -1,4 +1,5 @@
 var lastNames = [
+
     "Smith",
     "Johnson",
     "Williams",
@@ -199,9 +200,14 @@ var lastNames = [
     "Cunningham",
     "Knight",
     "Bradley"
+
   ];
 
 var maleNames = [
+
+  "Christopher",
+  "Aaron",
+  "David",
   "Noah",
   "Anlow",
   "Dato",
@@ -244,17 +250,36 @@ var maleNames = [
   "Tavon",
   "Tegan",
   "Vanan",
-  "Vincent",
-  "Noah"
+  "Vincent"
 
 ];
 
-var femaleNames = ["Natalia", "Magda","Azura","Brey", "Hallan", "Kasaki", "Lorelei", "Mirabel", "Pharana", "Remora",
-                        "Rosalyn", "Sachil", "Saidi", "Tanika", "Tura", "Tylsa", "Vencia", "Xandrilla"];
+var femaleNames = [
+
+  "Natalia",
+  "Magda",
+  "Azura",
+  "Brey",
+  "Hallan",
+  "Kasaki",
+  "Lorelei",
+  "Mirabel",
+  "Pharana",
+  "Remora",
+  "Rosalyn",
+  "Sachil",
+  "Saidi",
+  "Tanika",
+  "Tura",
+  "Tylsa",
+  "Vencia",
+  "Xandrilla"
+
+];
 
 
 
 
-  exports.lastNames = lastNames;
-  exports.maleNames = maleNames;
+  exports.lastNames   = lastNames;
+  exports.maleNames   = maleNames;
   exports.femaleNames = femaleNames;
