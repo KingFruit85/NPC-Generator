@@ -11,6 +11,7 @@ const utils =require('./utils.js');
 
 const fs =require('fs');
 
+
 //-----------------------
 
 //some generic properties
@@ -350,14 +351,14 @@ var createMultiplePeople = (number) =>{
   return group;
 }
 
-tempPerson = createPerson("adult")
-
-fs.writeFile('export.txt', JSON.stringify(tempPerson, undefined, 2), (err) => {
-  if (err) throw err;
-
-  console.log("saved")
-  console.log(tempPerson)
-})
+// tempPerson = createPerson("adult")
+//
+// fs.writeFile('export.txt', JSON.stringify(tempPerson, undefined, 2), (err) => {
+//   if (err) throw err;
+//
+//   console.log("-saved-")
+//   console.log(tempPerson)
+// })
 
 
 
