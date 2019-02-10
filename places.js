@@ -86,3 +86,6 @@ fs.writeFile('places.txt', JSON.stringify(populateResidentialPlace(), undefined,
 
   console.log("saved")
 })
+
+exports.populateHouse = populateHouse;
+exports.populateResidentialPlace = populateResidentialPlace;
