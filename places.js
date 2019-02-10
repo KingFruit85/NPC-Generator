@@ -54,6 +54,7 @@ var populateResidentialPlace = ( min , max ) => {
         house.houseNumber = numberOfHouses;
         house.fullAddress = house.houseNumber + " " + placeName;
         residentialPlace[house.fullAddress] = house;
+        residentialPlace.placeInfo.areaName = placeName;
 
     }
     residentialPlace
@@ -79,13 +80,13 @@ var populateResidentialPlace = ( min , max ) => {
 
 
 ///testing///
-const fs =require('fs');
-
-fs.writeFile('places.txt', JSON.stringify(populateResidentialPlace(), undefined, 2), (err) => {
-  if (err) throw err;
-
-  console.log("saved")
-})
+// const fs =require('fs');
+//
+// fs.writeFile('places.txt', JSON.stringify(populateResidentialPlace(), undefined, 2), (err) => {
+//   if (err) throw err;
+//
+//   console.log("saved")
+// })
 
 exports.populateHouse = populateHouse;
 exports.populateResidentialPlace = populateResidentialPlace;
