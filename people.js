@@ -9,11 +9,14 @@ const traits =require('./traits.js');
 const death =require('./death.js');
 const utils =require('./utils.js');
 
+const fs =require('fs');
+
 //-----------------------
 
 //some generic properties
 
 const genders = ["male", "female"];
+const ages = ["infant", "child","youth","adult","senior"];
 
 
 //-----------------------
@@ -61,7 +64,7 @@ var createAge = (person, category) => {
       case ( person.age > 14 && person.age < 25 ):person.ageCategory = "youth";break;
       case ( person.age > 24 && person.age < 65 ):person.ageCategory = "adult";break;
       case ( person.age > 64 )                   :person.ageCategory = "senior";break;
-      default: age.category = "Fell though switch case statement";
+      default: person.ageCategory = "Fell though switch case statement";
       return person;
   }
   }
@@ -191,8 +194,8 @@ var createSpousePerson = (person, gender) => {
     getGender(spouse, gender)
     createName(spouse);
     createAge(spouse, person.ageCategory);
-    relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
-    spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
+    spouse.relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
+    // spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
     spouse.causesOfDeath = utils.getRandomItem(death.causesOfDeath);
 
   }
@@ -208,8 +211,8 @@ var createSpousePerson = (person, gender) => {
     getOccupation(spouse);
     createFeatures(spouse);
     getTraits(spouse);
-    relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
-    spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
+    spouse.relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
+    // spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
 
     if (person.maritalStatus === "married" || person.maritalStatus === "widow" || person.maritalStatus == "widower")
     {
@@ -223,43 +226,91 @@ var createSpousePerson = (person, gender) => {
 
 }
 
-//rewrite/refactor - too long, too confusing to read
-var createChild = (person) => {
+//new createChild function
+
+var createChild = (person) =>{
 
   if (person.spouse != "no spouse" && person.spouse.gender != person.gender){
-    person.children = [];
-    potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
 
-    for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
+    person.children = [];
+
+    // var potentalChildren = Math.floor((spouse.relationshipLength / 2));
+    // person.potentalChildren = potentalChildren;
+    i = spouse.relationshipLength;
+
+
+    for (i; i > 0; i -- ){
+
       let child = {};
-      getGender(child);
-      createName(child)
-      child.lastName = getFamilySurname(person);
-      child.age = utils.getRandomNumber(1 , (person.age - 16));
-      person.children.push(child)
+          child = createPerson("child");
+          child.lastName = getFamilySurname(person);
+          person.children.push(child);
+
     }
-    return person;
+
   }
   else if (person.spouse != "no spouse" && person.spouse.gender === person.gender){
 
-      person.adoptedChildren = [];
-      potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
+    person.adoptedChildren = [];
 
-      for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
-        let child = {};
-        getGender(child);
-        createName(child)
-        child.lastName = getFamilySurname(person);
-        child.age = utils.getRandomNumber(1 , (person.age - 16));
-        person.adoptedChildren.push(child)
-      }
-      return person;
+    // var potentalChildren = Math.floor((spouse.relationshipLength / 2));
+    // person.potentalChildren = potentalChildren;
+    i = spouse.relationshipLength;
+
+    for (i; i > 0; i -- ){
+
+      let child = {};
+          child = createPerson("child");
+          child.lastName = getFamilySurname(person);
+          person.adoptedChildren.push(child);
+
   }
+
+}
   else{
     person.children = "no children"
   }
-  return person
+    return person;
 }
+
+
+//rewrite/refactor - too long, too confusing to read
+// var createChild = (person) => {
+//
+//   if (person.spouse != "no spouse" && person.spouse.gender != person.gender){
+//     person.children = [];
+//     potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
+//
+//     for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
+//       let child = {};
+//       getGender(child);
+//       createName(child)
+//       child.lastName = getFamilySurname(person);
+//       child.age = utils.getRandomNumber(1 , (person.age - 16));
+//       person.children.push(child)
+//     }
+//     return person;
+//   }
+//   else if (person.spouse != "no spouse" && person.spouse.gender === person.gender){
+//
+//       person.adoptedChildren = [];
+//       potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
+//
+//       for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
+//         let child = {};
+//         getGender(child);
+//         createName(child)
+//         child.lastName = getFamilySurname(person);
+//         child.age = utils.getRandomNumber(1 , (person.age - 16));
+//         person.adoptedChildren.push(child)
+//       }
+//       return person;
+//   }
+//   else{
+//     person.children = "no children"
+//   }
+//   return person
+// }
 
 var getFamilySurname = (person) => {
 
@@ -279,93 +330,53 @@ var getFamilySurname = (person) => {
   return familySurname;
 }
 
+// person construtor
 
-//this probably needs a refactor, must be a cleaner way to handle the age category arguements
-var createPerson = (category) => {
+var newPerson = (ageCat) => {
 
-  person = {};
+  let person = {};
+
   person.status = "alive";
-  // person.status = "alive";
-
-  if (category === undefined){
-
-    getGender(person);
-    createName(person);
-    createAge(person);
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-  }
-  else if (category === "adult"){
-
-    getGender(person);
-    createName(person);
-    createAge(person, "adult");
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-
-  }
-  else if (category === "youth"){
-
-    getGender(person);
-    createName(person);
-    createAge(person, "youth");
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-  }
-  else if (category === "infant"){
-
-    getGender(person);
-    createName(person);
-    createAge(person, "infant");
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-  }
-  else if (category == "senior"){
-
-    getGender(person);
-    createName(person);
-    createAge(person, "senior");
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-  }
-  else if (category === "child"){
-
-    getGender(person);
-    createName(person);
-    createAge(person, "child");
-    getMaritalStatus(person);
-    getHeight(person);
-    getOccupation(person);
-    createFeatures(person);
-    getTraits(person);
-
-  }
-
-  createSpouse(person)
+  getGender(person);
+  createName(person);
+  createAge(person, ageCat);
+  getMaritalStatus(person);
+  getHeight(person);
+  getOccupation(person);
+  createFeatures(person);
+  getTraits(person);
+  createSpouse(person);
   createChild(person)
+
   return person;
 
 }
+
+var createPerson = (category) => {
+
+  if (category === undefined) {
+
+    return newPerson(utils.getRandomItem(ages));
+
+  }
+  else {
+    switch (true) {
+      case category === "infant":return newPerson("infant");break;
+      case category === "child" :return newPerson("child");break;
+      case category === "youth" :return newPerson("youth");break;
+      case category === "adult" :return newPerson("adult");break;
+      case category === "senior":return newPerson("senior");break;
+
+      default: throw (err);
+
+    }
+
+  }
+
+
+}
+
+
 
 
 var createMultiplePeople = (number) =>{
@@ -377,18 +388,18 @@ var createMultiplePeople = (number) =>{
   return group;
 }
 
-// const fs =require('fs');
-//
-// fs.writeFile('export.txt', JSON.stringify(createMultiplePeople(100), undefined, 2), (err) => {
-//   if (err) throw err;
-//
-//   console.log("saved")
-// })
+tempPerson = createMultiplePeople(10)
 
-// xy = createPerson("adult")
-// console.log(xy)
+fs.writeFile('export.txt', JSON.stringify(tempPerson, undefined, 2), (err) => {
+  if (err) throw err;
+
+  console.log("saved")
+  console.log(tempPerson)
+})
+
+
 
 // console.log(JSON.stringify(createMultiplePeople(100), undefined, 2))
-console.log(createPerson(""))
+// console.log(newPerson());
 
 exports.createPerson = createPerson;
