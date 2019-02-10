@@ -195,7 +195,6 @@ var createSpousePerson = (person, gender) => {
     createName(spouse);
     createAge(spouse, person.ageCategory);
     spouse.relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
-    // spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
     spouse.causesOfDeath = utils.getRandomItem(death.causesOfDeath);
 
   }
@@ -212,7 +211,6 @@ var createSpousePerson = (person, gender) => {
     createFeatures(spouse);
     getTraits(spouse);
     spouse.relationshipLength = utils.getRandomNumber(1 , (spouse.age - 16))
-    // spouse.relationshipLength = relationshipLength - utils.getRandomNumber(1 , relationshipLength)
 
     if (person.maritalStatus === "married" || person.maritalStatus === "widow" || person.maritalStatus == "widower")
     {
@@ -234,17 +232,21 @@ var createChild = (person) =>{
 
     person.children = [];
 
-    // var potentalChildren = Math.floor((spouse.relationshipLength / 2));
-    // person.potentalChildren = potentalChildren;
-    i = spouse.relationshipLength;
+    let i = utils.getRandomNumber( 1, 4 );
 
+    if ( i === 0 ){
+      person.children = "no children";
+    }
+    else {
 
-    for (i; i > 0; i -- ){
+      for (i; i > 0; i -- ){
 
-      let child = {};
-          child = createPerson("child");
-          child.lastName = getFamilySurname(person);
-          person.children.push(child);
+        let child = {};
+            child = createPerson("child");
+            child.lastName = getFamilySurname(person);
+            person.children.push(child);
+
+      }
 
     }
 
@@ -253,8 +255,7 @@ var createChild = (person) =>{
 
     person.adoptedChildren = [];
 
-    // var potentalChildren = Math.floor((spouse.relationshipLength / 2));
-    // person.potentalChildren = potentalChildren;
+
     i = spouse.relationshipLength;
 
     for (i; i > 0; i -- ){
@@ -274,43 +275,6 @@ var createChild = (person) =>{
 }
 
 
-//rewrite/refactor - too long, too confusing to read
-// var createChild = (person) => {
-//
-//   if (person.spouse != "no spouse" && person.spouse.gender != person.gender){
-//     person.children = [];
-//     potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
-//
-//     for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
-//       let child = {};
-//       getGender(child);
-//       createName(child)
-//       child.lastName = getFamilySurname(person);
-//       child.age = utils.getRandomNumber(1 , (person.age - 16));
-//       person.children.push(child)
-//     }
-//     return person;
-//   }
-//   else if (person.spouse != "no spouse" && person.spouse.gender === person.gender){
-//
-//       person.adoptedChildren = [];
-//       potentalChildren = Math.floor(((spouse.relationshipLength / 4)))
-//
-//       for (potentalChildren; potentalChildren > 0; potentalChildren -- ){
-//         let child = {};
-//         getGender(child);
-//         createName(child)
-//         child.lastName = getFamilySurname(person);
-//         child.age = utils.getRandomNumber(1 , (person.age - 16));
-//         person.adoptedChildren.push(child)
-//       }
-//       return person;
-//   }
-//   else{
-//     person.children = "no children"
-//   }
-//   return person
-// }
 
 var getFamilySurname = (person) => {
 
@@ -360,6 +324,7 @@ var createPerson = (category) => {
 
   }
   else {
+
     switch (true) {
       case category === "infant":return newPerson("infant");break;
       case category === "child" :return newPerson("child");break;
@@ -367,13 +332,10 @@ var createPerson = (category) => {
       case category === "adult" :return newPerson("adult");break;
       case category === "senior":return newPerson("senior");break;
 
-      default: throw (err);
+      default: return "unable to create person object, supllied arguemtn is not valid";
 
     }
-
   }
-
-
 }
 
 
@@ -388,7 +350,7 @@ var createMultiplePeople = (number) =>{
   return group;
 }
 
-tempPerson = createMultiplePeople(10)
+tempPerson = createPerson("adult")
 
 fs.writeFile('export.txt', JSON.stringify(tempPerson, undefined, 2), (err) => {
   if (err) throw err;
