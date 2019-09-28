@@ -361,7 +361,7 @@ var createMultiplePeople = (number) =>{
 // })
 
 
-
+console.log(JSON.stringify(createPerson(), undefined, 2))
 // console.log(JSON.stringify(createMultiplePeople(100), undefined, 2))
 // console.log(newPerson());
 
